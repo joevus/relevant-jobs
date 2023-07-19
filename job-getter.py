@@ -42,10 +42,10 @@ def get_job_listings(job_listings):
         # get the job description
         job_description = job_soup.find_all('article', class_='article--details')[1].find('div', class_='article__content').text.strip()
 
-        # search for the word 'clearance' in the job description and store thirty characters before and after
+        # search for the word 'clearance' in the job description and store 50 characters before and 30 after
         if 'clearance' in job_description:
             clearance_index = job_description.find('clearance')
-            clearance = job_description[clearance_index-30:clearance_index+30]
+            clearance = job_description[clearance_index-50:clearance_index+30]
         else:
             clearance = 'no clearance specified'
     
