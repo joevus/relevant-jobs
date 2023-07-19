@@ -58,7 +58,7 @@ headers = {
 }
 
 # get the html of the jobs page
-url = "https://apply.deloitte.com/careers/SearchJobs/data%20engineer?sort=relevancy"
+url = "https://apply.deloitte.com/careers/SearchJobs/python?sort=relevancy"
 page = requests.get(url, headers=headers)
 soup = BeautifulSoup(page.content, 'html.parser')
 
