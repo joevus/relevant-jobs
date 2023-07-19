@@ -20,21 +20,9 @@ csv_writer = csv.writer(open(filename, 'w'))
 # write the header row
 csv_writer.writerow(['date', 'time', 'title', 'location', 'link', 'clearance'])
 
-# set the headers
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
-}
-
-# get the html of the jobs page
-url = "https://apply.deloitte.com/careers/SearchJobs/data%20engineer?sort=relevancy"
-page = requests.get(url, headers=headers)
-soup = BeautifulSoup(page.content, 'html.parser')
-
-# get the job listings
-job_listings = soup.find_all('article', class_='article--result')
-
-# loop through the job listings
-for job_listing in job_listings:
+# function for looping through job listings
+def get_job_listings(job_listings):
+     for job_listing in job_listings:
     
         # get the title
         title = job_listing.find('h3', class_='article__header__text__title').text.strip()
@@ -64,7 +52,29 @@ for job_listing in job_listings:
         # write the data to the csv file
         csv_writer.writerow([date, time, title, location, link, clearance])
 
+# set the headers
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
+}
 
+# get the html of the jobs page
+url = "https://apply.deloitte.com/careers/SearchJobs/data%20engineer?sort=relevancy"
+page = requests.get(url, headers=headers)
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# loop while there is a next page
+while soup.find('a', class_='paginationNextLink'):
+
+    # get the job listings
+    job_listings = soup.find_all('article', class_='article--result')
+
+    # loop through the job listings
+    get_job_listings(job_listings)
+
+    # get the html of the next page
+    url = soup.find('a', class_='paginationNextLink')['href']
+    page = requests.get(url, headers=headers)
+    soup = BeautifulSoup(page.content, 'html.parser')
 
 # print a message to the console
 print("Job data has been scraped and saved to " + filename)
