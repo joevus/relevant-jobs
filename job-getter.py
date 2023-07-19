@@ -46,6 +46,9 @@ def get_job_listings(job_listings):
         if 'clearance' in job_description:
             clearance_index = job_description.find('clearance')
             clearance = job_description[clearance_index-50:clearance_index+30]
+        elif 'Clearance' in job_description:
+            clearance_index = job_description.find('Clearance')
+            clearance = job_description[clearance_index-50:clearance_index+30]
         else:
             clearance = 'no clearance specified'
     
